@@ -1284,6 +1284,9 @@ pub struct Window {
     pub(crate) window_profiler: profiler::WindowProfiler,
     last_input_modality: InputModality,
     touch_gestures: TouchGestureRecognizer,
+    /// What the scroll containers said about the momentum step being
+    /// dispatched; see [`Self::report_scroll_motion`].
+    momentum_scroll_motion: ScrollMotion,
     touch_prediction_enabled: bool,
     long_press_timer: Option<Task<()>>,
     long_press_capture: Option<EntityId>,
@@ -1632,6 +1635,17 @@ fn default_bounds(display_id: Option<DisplayId>, cx: &mut App) -> WindowBounds {
         (false, false) => display_bounds.origin,
     };
     window_bounds_ctor(Bounds::new(final_origin, base_size))
+}
+
+/// What scroll containers reported about one touch momentum step.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum ScrollMotion {
+    /// No scroll container reported on the step.
+    Unreported,
+    /// Every container that reported was already at its edge.
+    Blocked,
+    /// At least one container moved its content.
+    Moved,
 }
 
 impl Window {
@@ -2408,6 +2422,7 @@ impl Window {
                     .gestures()
                     .map_or_else(GestureTuning::default, |gestures| gestures.tuning()),
             ),
+            momentum_scroll_motion: ScrollMotion::Unreported,
             touch_prediction_enabled: true,
             long_press_timer: None,
             long_press_capture: None,
@@ -6202,12 +6217,34 @@ impl Window {
     fn schedule_touch_momentum_tick(&mut self) {
         self.on_next_frame(|window, cx| {
             if let Some(gesture) = window.touch_gestures.tick_momentum() {
+                window.momentum_scroll_motion = ScrollMotion::Unreported;
                 window.dispatch_recognized_touch_gesture(gesture, cx);
+                // The content reached its edge: the fling is over on screen,
+                // so end it here as a scroll view does, rather than letting
+                // it run out its curve and catch the next touch, which would
+                // swallow a tap on content that is not moving.
+                if window.momentum_scroll_motion == ScrollMotion::Blocked
+                    && let Some(end) = window.touch_gestures.end_momentum()
+                {
+                    window.dispatch_recognized_touch_gesture(end, cx);
+                }
             }
             if window.touch_gestures.has_momentum() {
                 window.schedule_touch_momentum_tick();
             }
         });
+    }
+
+    /// Called by a scroll container that applied a scroll step, with whether
+    /// the step moved its content. While touch momentum is dispatching a
+    /// step, a step that only scroll containers at their edge took ends the
+    /// momentum; one that any container moved, or that no container
+    /// reported on (a custom scroll handler), lets it continue.
+    pub(crate) fn report_scroll_motion(&mut self, moved: bool) {
+        self.momentum_scroll_motion = match (self.momentum_scroll_motion, moved) {
+            (_, true) | (ScrollMotion::Moved, _) => ScrollMotion::Moved,
+            _ => ScrollMotion::Blocked,
+        };
     }
 
     fn dispatch_mouse_event(&mut self, event: &dyn Any, cx: &mut App) {

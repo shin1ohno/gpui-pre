@@ -51,6 +51,8 @@ zed-version = "0.2.2"
 zed-rev = "d2a4fb6ded7c470be25d1541281da3882495b65b"
 
 [features]
+# The examples need gpui_platform, which only Zed's workspace provides.
+examples = []
 bench = ["bench-support"]
 bench-support = [
     "profiler",
@@ -94,186 +96,237 @@ x11 = ["scap?/x11"]
 [lib]
 name = "gpui"
 path = "src/gpui.rs"
+test = false
+doctest = false
 
 [[example]]
 name = "a11y"
 path = "examples/a11y.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "active_state_bug"
 path = "examples/active_state_bug.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "anchor"
 path = "examples/anchor.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "animation"
 path = "examples/animation.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "data_table"
 path = "examples/data_table.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "drag_drop"
 path = "examples/drag_drop.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "focus_visible"
 path = "examples/focus_visible.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "gif_viewer"
 path = "examples/gif_viewer.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "gradient"
 path = "examples/gradient.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "grid_layout"
 path = "examples/grid_layout.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "hello_world"
 path = "examples/hello_world.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "image"
 path = "examples/image/image.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "image_gallery"
 path = "examples/image_gallery.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "image_loading"
 path = "examples/image_loading.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "input"
 path = "examples/input.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "layer_shell"
 path = "examples/layer_shell.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "list_example"
 path = "examples/list_example.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "mouse_pressure"
 path = "examples/mouse_pressure.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "move_entity_between_windows"
 path = "examples/move_entity_between_windows.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "on_window_close_quit"
 path = "examples/on_window_close_quit.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "opacity"
 path = "examples/opacity.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "ownership_post"
 path = "examples/ownership_post.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "painting"
 path = "examples/painting.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "paths_bench"
 path = "examples/paths_bench.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "pattern"
 path = "examples/pattern.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "popover"
 path = "examples/popover.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "scrollable"
 path = "examples/scrollable.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "set_menus"
 path = "examples/set_menus.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "shadow"
 path = "examples/shadow.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "svg"
 path = "examples/svg/svg.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "system_notifications"
 path = "examples/system_notifications.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "tab_stop"
 path = "examples/tab_stop.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "testing"
 path = "examples/testing.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "text"
 path = "examples/text.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "text_layout"
 path = "examples/text_layout.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "text_wrapper"
 path = "examples/text_wrapper.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "toggle_headless"
 path = "examples/toggle_headless.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "tree"
 path = "examples/tree.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "uniform_list"
 path = "examples/uniform_list.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "view_example"
 path = "examples/view_example/view_example_main.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "window"
 path = "examples/window.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "window_movable"
 path = "examples/window_movable.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "window_positioning"
 path = "examples/window_positioning.rs"
+required-features = ["examples"]
 
 [[example]]
 name = "window_shadow"
 path = "examples/window_shadow.rs"
+required-features = ["examples"]
 
 [[test]]
 name = "action_macros"
 path = "tests/action_macros.rs"
+
+[[test]]
+name = "touch_momentum_edge"
+path = "tests/touch_momentum_edge.rs"
+required-features = ["test-support"]
 
 [dependencies.accesskit]
 version = "0.24.0"
