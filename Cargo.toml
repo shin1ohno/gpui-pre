@@ -323,6 +323,11 @@ required-features = ["examples"]
 name = "action_macros"
 path = "tests/action_macros.rs"
 
+[[test]]
+name = "touch_momentum_edge"
+path = "tests/touch_momentum_edge.rs"
+required-features = ["test-support"]
+
 [dependencies.accesskit]
 version = "0.24.0"
 features = ["enumn"]
