@@ -17,6 +17,9 @@ This repository is a fork of the `gpui-pre` 0.3.12 crate, which
   - End touch momentum when the content it scrolls stops at its edge, so the
     next tap presses instead of catching a fling that no longer moves
     anything (shin1ohno/yebisu#161).
+  - Say where the compiled sources are (`links = "gpui"`, `DEP_GPUI_SRC` for
+    direct dependents' build scripts), so herdr-uikit's renderer ABI generator
+    reads this copy instead of looking for one in the Cargo registry.
 - Tests added here run with
   `cargo test --features test-support --test touch_momentum_edge`.
   Plain `cargo test` runs only the integration tests that need no
