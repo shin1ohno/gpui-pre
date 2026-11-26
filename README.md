@@ -14,7 +14,9 @@ This repository is a fork of the `gpui-pre` 0.3.12 crate, which
   `Cargo.toml`). The copyright stays with the original authors.
 - Changes on top of the import are kept to what the consumers need. Each one is a
   pull request on this repository, and this list names them:
-  - (none yet)
+  - End touch momentum when the content it scrolls stops at its edge, so the
+    next tap presses instead of catching a fling that no longer moves
+    anything (shin1ohno/yebisu#161).
 - Tests added here run with
   `cargo test --features test-support --test touch_momentum_edge`.
   Plain `cargo test` runs only the integration tests that need no

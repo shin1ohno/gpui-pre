@@ -1027,6 +1027,19 @@ impl TouchGestureRecognizer {
         self.momentum.is_some()
     }
 
+    /// Ends post-fling momentum before its curve runs out, as when the
+    /// content it scrolls reached its edge, returning the final scroll step
+    /// to dispatch, or `None` when no momentum is in progress. A touch that
+    /// starts afterwards is a fresh tap or pan candidate, not a catch.
+    pub(crate) fn end_momentum(&mut self) -> Option<RecognizedTouchGesture> {
+        let momentum = self.momentum.take()?;
+        Some(RecognizedTouchGesture::Scroll(scroll_event(
+            momentum.position,
+            Point::default(),
+            TouchPhase::Ended,
+        )))
+    }
+
     /// Advances post-fling momentum by one frame, returning the scroll step
     /// to dispatch, or `None` when no momentum is in progress. The final step
     /// carries [`TouchPhase::Ended`] to close the synthetic scroll stream.
