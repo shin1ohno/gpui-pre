@@ -2,6 +2,12 @@
 
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
+    // Tell direct dependents' build scripts where these sources are
+    // (`DEP_GPUI_SRC`), so one that reads them, like herdr-uikit's renderer
+    // ABI generator, reads the copy being compiled, from the registry or not.
+    if let Some(dir) = std::env::var_os("CARGO_MANIFEST_DIR") {
+        println!("cargo::metadata=src={}", std::path::Path::new(&dir).join("src").display());
+    }
     println!("cargo::rustc-check-cfg=cfg(gles)");
 
     // Leak detection does bookkeeping on every entity handle, so `test-support`

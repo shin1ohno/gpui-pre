@@ -15,6 +15,7 @@ name = "gpui-pre"
 version = "0.3.12"
 authors = ["Nathan Sobo <nathan@zed.dev>"]
 build = "build.rs"
+links = "gpui"
 publish = true
 autolib = false
 autobins = false
