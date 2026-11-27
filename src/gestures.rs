@@ -851,6 +851,18 @@ impl TouchGestureRecognizer {
                         Axis::Vertical => velocity.x = 0.,
                         Axis::Horizontal => velocity.y = 0.,
                     }
+                    // The quadratic fit can turn inside its window: samples
+                    // that queued behind a busy main thread share nearly one
+                    // timestamp, and a finger that rested before lifting adds
+                    // flat samples. Its slope then points back against the
+                    // pan, and flinging with it scrolls the content backwards
+                    // after the finger left it (shin1ohno/yebisu#258). A
+                    // finger that really turned has its last movement
+                    // pointing the new way, so it still flings.
+                    if movements_oppose(point(px(velocity.x), px(velocity.y)), touch.last_movement)
+                    {
+                        velocity = Point::default();
+                    }
                     let speed = (velocity.x.powi(2) + velocity.y.powi(2)).sqrt();
                     let mut release_delta = event.position - touch.emitted_position;
                     lock_delta_to_axis(&mut release_delta, axis);

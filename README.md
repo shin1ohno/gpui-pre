@@ -20,8 +20,12 @@ This repository is a fork of the `gpui-pre` 0.3.12 crate, which
   - Say where the compiled sources are (`links = "gpui"`, `DEP_GPUI_SRC` for
     direct dependents' build scripts), so herdr-uikit's renderer ABI generator
     reads this copy instead of looking for one in the Cargo registry.
+  - Do not fling a touch pan against its own last movement: the quadratic
+    release-velocity fit can turn when samples queued behind a busy main
+    thread, and the content then coasted backwards after the finger lifted
+    (shin1ohno/yebisu#258).
 - Tests added here run with
-  `cargo test --features test-support --test touch_momentum_edge`.
+  `cargo test --features test-support --test touch_momentum_edge --test touch_release_velocity`.
   Plain `cargo test` runs only the integration tests that need no
   feature: the published crate cannot build its lib tests, doctests or
   examples outside Zed's workspace (see the first commit after the import).
