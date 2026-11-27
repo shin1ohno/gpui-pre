@@ -329,6 +329,11 @@ name = "touch_momentum_edge"
 path = "tests/touch_momentum_edge.rs"
 required-features = ["test-support"]
 
+[[test]]
+name = "touch_release_velocity"
+path = "tests/touch_release_velocity.rs"
+required-features = ["test-support"]
+
 [dependencies.accesskit]
 version = "0.24.0"
 features = ["enumn"]
